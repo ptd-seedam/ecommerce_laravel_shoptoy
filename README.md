@@ -1,4 +1,4 @@
-\*\*\*\* # Nền Tảng Thương Mại Điện Tử với Laravel (MVC & Microservices)
+# Nền Tảng Thương Mại Điện Tử với Laravel (MVC & Microservices)
 
 Kho lưu trữ này giới thiệu một nền tảng thương mại điện tử được phát triển bằng Laravel, áp dụng kiến trúc MVC và microservices nhằm đảm bảo khả năng mở rộng và tính mô-đun. Dự án cung cấp một cơ sở vững chắc cho việc xây dựng các cửa hàng trực tuyến hiện đại với các chức năng thiết yếu như quản lý sản phẩm, giỏ hàng, xử lý đơn đặt hàng và tích hợp thanh toán.
 
