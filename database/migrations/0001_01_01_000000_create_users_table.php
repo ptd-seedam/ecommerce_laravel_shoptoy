@@ -1,63 +1,137 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
-    {
-        // Tạo bảng users nếu chưa tồn tại
-        if (!Schema::hasTable('users')) {
-            Schema::create('users', function (Blueprint $table) {
-                $table->id();
-                $table->string('name');
-                $table->string('email')->unique();
-                $table->timestamp('email_verified_at')->nullable();
-                $table->string('password');
-                $table->rememberToken();
-                $table->timestamps();
-            });
-        }
+return new class extends Migration {
+    public function up() {
+        Schema::create('users', function (Blueprint $table) {
+            $table->id('UserId');
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->timestamps();
+        });
 
-        // Tạo bảng password_reset_tokens nếu chưa tồn tại
-        if (!Schema::hasTable('password_reset_tokens')) {
-            Schema::create('password_reset_tokens', function (Blueprint $table) {
-                $table->string('email')->primary();
-                $table->string('token');
-                $table->timestamp('created_at')->nullable();
-            });
-        }
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id('CategoryId');
+            $table->string('name');
+            $table->timestamps();
+        });
 
-        // Tạo bảng sessions nếu chưa tồn tại
-        if (!Schema::hasTable('sessions')) {
-            Schema::create('sessions', function (Blueprint $table) {
-                $table->string('id')->primary();
-                $table->foreignId('user_id')->nullable()->index();
-                $table->string('ip_address', 45)->nullable();
-                $table->text('user_agent')->nullable();
-                $table->longText('payload');
-                $table->integer('last_activity')->index();
-            });
-        }
+        Schema::create('products', function (Blueprint $table) {
+            $table->id('ProductId');
+            $table->string('Name');
+            $table->text('Description');
+            $table->decimal('Price', 10, 2);
+            $table->integer('Stock');
+            $table->integer('so_luong_da_ban')->default(0);
+            $table->foreignId('CategoryId')->constrained('categories')->onDelete('cascade');
+            $table->timestamps();
+        });
+
+        Schema::create('discounts', function (Blueprint $table) {
+            $table->id('DiscountId');
+            $table->string('name');
+            $table->decimal('percentage', 5, 2);
+            $table->timestamps();
+        });
+
+        Schema::create('product_discounts', function (Blueprint $table) {
+            $table->id('ProductDiscountId');
+            $table->foreignId('ProductId')->constrained('products')->onDelete('cascade');
+            $table->foreignId('DiscountId')->constrained('discounts')->onDelete('cascade');
+            $table->timestamps();
+        });
+
+        Schema::create('inventories', function (Blueprint $table) {
+            $table->id('InventoryId');
+            $table->foreignId('ProductId')->constrained('products')->onDelete('cascade');
+            $table->integer('quantity');
+            $table->timestamps();
+        });
+
+        Schema::create('carts', function (Blueprint $table) {
+            $table->id('CartId');
+            $table->foreignId('UserId')->constrained('users')->onDelete('cascade');
+            $table->timestamps();
+        });
+
+        Schema::create('cart_items', function (Blueprint $table) {
+            $table->id('CartItemId');
+            $table->foreignId('CartId')->constrained('carts')->onDelete('cascade');
+            $table->foreignId('ProductId')->constrained('products')->onDelete('cascade');
+            $table->integer('quantity');
+            $table->timestamps();
+        });
+
+        Schema::create('orders', function (Blueprint $table) {
+            $table->id('OrderId');
+            $table->foreignId('UserId')->constrained('users')->onDelete('cascade');
+            $table->string('OrderStatus');
+            $table->decimal('TotalAmount', 10, 2);
+            $table->string('PaymentStatus');
+            $table->text('ShippingAddress');
+            $table->timestamps();
+        });
+
+        Schema::create('order_items', function (Blueprint $table) {
+            $table->id('OrderItemId');
+            $table->foreignId('OrderId')->constrained('orders')->onDelete('cascade');
+            $table->foreignId('ProductId')->constrained('products')->onDelete('cascade');
+            $table->integer('Quantity');
+            $table->decimal('UnitPrice', 10, 2);
+            $table->decimal('TotalPrice', 10, 2);
+            $table->timestamps();
+        });
+
+        Schema::create('payments', function (Blueprint $table) {
+            $table->id('PaymentId');
+            $table->foreignId('OrderId')->constrained('orders')->onDelete('cascade');
+            $table->string('PaymentMethod');
+            $table->dateTime('PaymentDate');
+            $table->decimal('Amount', 10, 2);
+            $table->timestamps();
+        });
+
+        Schema::create('shipments', function (Blueprint $table) {
+            $table->id('ShipmentId');
+            $table->foreignId('OrderId')->constrained('orders')->onDelete('cascade');
+            $table->string('ShipmentStatus');
+            $table->timestamps();
+        });
+
+        Schema::create('reviews', function (Blueprint $table) {
+            $table->id('ReviewId');
+            $table->foreignId('UserId')->constrained('users')->onDelete('cascade');
+            $table->foreignId('ProductId')->constrained('products')->onDelete('cascade');
+            $table->text('Content');
+            $table->integer('Rating');
+            $table->timestamps();
+        });
+
+        Schema::create('product_images', function (Blueprint $table) {
+            $table->id('ImageId');
+            $table->foreignId('ProductId')->constrained('products')->onDelete('cascade');
+            $table->string('ImageUrl');
+            $table->timestamps();
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        // Xóa bảng users nếu tồn tại
+    public function down() {
+        Schema::dropIfExists('product_images');
+        Schema::dropIfExists('reviews');
+        Schema::dropIfExists('shipments');
+        Schema::dropIfExists('payments');
+        Schema::dropIfExists('order_items');
+        Schema::dropIfExists('orders');
+        Schema::dropIfExists('cart_items');
+        Schema::dropIfExists('carts');
+        Schema::dropIfExists('inventories');
+        Schema::dropIfExists('product_discounts');
+        Schema::dropIfExists('discounts');
+        Schema::dropIfExists('products');
+        Schema::dropIfExists('categories');
         Schema::dropIfExists('users');
-
-        // Xóa bảng password_reset_tokens nếu tồn tại
-        Schema::dropIfExists('password_reset_tokens');
-
-        // Xóa bảng sessions nếu tồn tại
-        Schema::dropIfExists('sessions');
     }
 };
