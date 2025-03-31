@@ -15,7 +15,7 @@ Hướng dẫn bắt đầu:
 Clone kho lưu trữ:
 
 ```bash
-git clone https://github.com/tentaikho/tenrepository.git
+git clone https://github.com/ptd-seedam/ecommerce_laravel_shoptoy
 ```
 
 Thiết lập môi trường: Cấu hình tệp .env với thông tin cơ sở dữ liệu và API của bạn.
