@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,16 +13,18 @@ class ProductDiscount extends Model
         'ProductId',
         'DiscountId',
     ];
-    protected $primaryKey = 'ProductDiscountId';
+
     public $incrementing = true;
+
+    protected $table = 'product_discounts';
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'ProductId', 'ProductId');
+        return $this->belongsTo(Product::class, 'ProductId', 'id');
     }
 
     public function discount()
     {
-        return $this->belongsTo(Discount::class, 'DiscountId', 'DiscountId');
+        return $this->belongsTo(Discount::class, 'DiscountId', 'id');
     }
 }

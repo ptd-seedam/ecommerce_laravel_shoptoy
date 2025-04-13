@@ -21,7 +21,7 @@ class SearchController extends Controller
         }
 
         if ($products->isEmpty()) {
-            $categoryIds = Category::where('Name', 'like', '%'.$search_value.'%')->pluck('CategoryId');
+            $categoryIds = Category::where('Name', 'like', '%'.$search_value.'%')->pluck('id');
             if ($categoryIds->isEmpty()) {
                 if ($products->isEmpty()) {
                     $cart = Cart::where('UserId', Auth::id())->first();

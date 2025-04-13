@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Discount extends Model
 {
@@ -18,13 +19,16 @@ class Discount extends Model
         'EndDate',
         'IsActive',
     ];
-    protected $primaryKey = 'DiscountId';
+
     public $incrementing = true;
+
     public $timestamps = false;
+
+    protected $table = 'discounts';
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'productdiscounts', 'DiscountId', 'ProductId');
+        return $this->belongsToMany(Product::class, 'product_discounts', 'id', 'id');
     }
 
     protected function startDate(): Attribute
@@ -40,11 +44,11 @@ class Discount extends Model
             get: fn ($value) => $value ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value)->format('Y-m-d') : null,
         );
     }
+
     public function productDiscount()
     {
-        return $this->belongsToMany(ProductDiscount::class, 'DiscountId', 'DiscountId');
+        return $this->belongsToMany(ProductDiscount::class, 'DiscountId', 'id');
     }
-
 
     public function getProductsByDiscountId($id)
     {
@@ -52,7 +56,7 @@ class Discount extends Model
         $discount = $this->find($id);
 
         // Nếu không tìm thấy discount, trả về mảng rỗng
-        if (!$discount) {
+        if (! $discount) {
             return [];
         }
 
@@ -60,4 +64,3 @@ class Discount extends Model
         return $discount->products;
     }
 }
-

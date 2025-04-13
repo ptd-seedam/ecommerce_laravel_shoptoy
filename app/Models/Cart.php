@@ -12,20 +12,16 @@ class Cart extends Model
     protected $fillable = [
         'UserId',
     ];
-    protected $primaryKey = 'CartId';
-    protected $table = 'carts';
-    // Nếu khóa chính  tự động tăng
-    public $incrementing = true;
-    public $timestamps = false;
 
+    protected $table = 'carts';
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'UserId', 'id');
     }
 
     public function cartItems()
     {
-        return $this->hasMany(CartItem::class, 'CartId', 'CartId');
+        return $this->hasMany(CartItem::class, 'CartId', 'id');
     }
 }

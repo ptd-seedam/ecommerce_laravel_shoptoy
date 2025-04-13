@@ -16,18 +16,15 @@ class Order extends Model
         'PaymentStatus',
         'ShippingAddress',
     ];
-    protected $primaryKey = 'OrderId';
-    public $incrementing = true;
-
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'UserId', 'UserId');
+        return $this->belongsTo(User::class, 'UserId', 'id');
     }
 
     public function orderItems()
     {
-        return $this->hasMany(OrderItem::class, 'OrderId','OrderId');
+        return $this->hasMany(OrderItem::class, 'OrderId', 'id');
     }
 
     public function payment()

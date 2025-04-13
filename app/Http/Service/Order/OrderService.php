@@ -1,16 +1,17 @@
 <?php
+
 namespace App\Http\Service\Order;
 
 use App\Models\Cart;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
+use App\Models\Discount;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Discount;
-use App\Models\Shipment;
 use App\Models\Payment;
+use App\Models\Shipment;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class OrderService
 {
@@ -19,7 +20,7 @@ class OrderService
         $cart = Cart::find($id);
         $cartItems = $cart->cartItems()->with('product')->get();
         $userId = Auth::id();
-        $address = DB::table('users')->where('UserId', $userId)->value('Address');
+        $address = DB::table('users')->where('id', $userId)->value('Address');
         $total = $cartItems->sum(function ($item) {
             return $item->product->Price * $item->Quantity;
         });
@@ -41,6 +42,7 @@ class OrderService
             'cartId' => $id,
         ]);
     }
+
     public function submitOrder(Request $request, $cartId)
     {
         $cart = Cart::with('cartItems.product')->findOrFail($cartId);
@@ -88,12 +90,14 @@ class OrderService
             'Amount' => $totalAmount,
         ]);
         Session::forget('cart');
+
         return redirect()->route('order.success', ['order_id' => $order->OrderId]);
     }
+
     public function applyCoupon(Request $request)
     {
         $request->validate([
-            'coupon_code' => 'required|string'
+            'coupon_code' => 'required|string',
         ]);
         $couponCode = $request->input('coupon_code');
         $discount = Discount::where('DiscountCode', $couponCode)
@@ -102,19 +106,19 @@ class OrderService
             ->whereDate('EndDate', '>=', now())
             ->first();
 
-        if (!$discount) {
+        if (! $discount) {
             return response()->json([
                 'success' => false,
-                'error' => 'Mã giảm giá không hợp lệ hoặc đã hết hạn.'
+                'error' => 'Mã giảm giá không hợp lệ hoặc đã hết hạn.',
             ]);
         }
         $userId = Auth::id();
         $cartId = Session::get('cart_ID');
-        $cart = Cart::where('UserId', $userId)->where('CartId', $cartId)->first();
-        if (!$cart) {
+        $cart = Cart::where('UserId', $userId)->where('id', $cartId)->first();
+        if (! $cart) {
             return response()->json([
                 'success' => false,
-                'error' => 'Không tìm thấy giỏ hàng.'
+                'error' => 'Không tìm thấy giỏ hàng.',
             ]);
         }
         $cartItems = $cart->cartItems()->with('product')->get();
@@ -130,13 +134,16 @@ class OrderService
         $total = max($total, 0);
         Session::put('discount', $discount);
         Session::put('cart_total', $total);
+
         return response()->json([
             'success' => true,
-            'new_total' => number_format($total, 0, ',', '.') . ' VNĐ'
+            'new_total' => number_format($total, 0, ',', '.').' VNĐ',
         ]);
     }
+
     // apply coupon
-    public function ad_edit(Request $request) {
+    public function ad_edit(Request $request)
+    {
         $orderId = $request->input('OrderId');
         $orderStatus = $request->input('OrderStatus');
         $paymentStatus = $request->input('PaymentStatus');
@@ -146,9 +153,12 @@ class OrderService
             $order->PaymentStatus = $paymentStatus;
             $order->save();
         }
+
         return true;
     }
-    public function editOrderItem(Request $request) {
+
+    public function editOrderItem(Request $request)
+    {
         $orderItemId = $request->input('OrderItemId');
         $quantity = $request->input('Quantity');
         $orderItem = OrderItem::find($orderItemId);
@@ -160,6 +170,7 @@ class OrderService
             $order->TotalAmount = $orderTotal;
             $order->save();
         }
+
         return true;
     }
 }

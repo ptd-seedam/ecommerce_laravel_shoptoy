@@ -16,17 +16,16 @@ class OrderItem extends Model
         'UnitPrice',
         'TotalPrice',
     ];
-    protected $primaryKey = 'OrderItemId';
-    public $incrementing = true;
-    protected $table = 'OrderItems';
+
+    protected $table = 'order_Items';
 
     public function order()
     {
-        return $this->belongsTo(Order::class , 'OrderId', 'OrderId');
+        return $this->belongsTo(Order::class, 'OrderId', 'id');
     }
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'ProductId','ProductId');
+        return $this->belongsTo(Product::class, 'ProductId', 'id');
     }
 }

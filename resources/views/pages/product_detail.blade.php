@@ -25,7 +25,7 @@
                     <span class="qty">{{ $quantity }}x</span>{{ number_format($totalPrice, 0, ',', '.') }}đ
                 </h4>
             </div>
-            <button class="delete" data-cart-item-id="{{ $item->CartItemId }}"><i class="fa fa-close"></i></button>
+            <button class="delete" data-cart-item-id="{{ $item->id }}"><i class="fa fa-close"></i></button>
         </div>
     @endforeach
 @endsection

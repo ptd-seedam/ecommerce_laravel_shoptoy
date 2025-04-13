@@ -13,12 +13,11 @@ class ProductImage extends Model
         'ProductId',
         'ImageUrl',
     ];
-    protected $primaryKey = 'ImageId';
-    public $incrementing = true;
-    protected $table = 'productimages';
+
+    protected $table = 'product_images';
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'ProductId', 'ProductId');
+        return $this->belongsTo(Product::class, 'ProductId', 'id');
     }
 }

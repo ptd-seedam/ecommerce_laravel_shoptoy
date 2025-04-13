@@ -16,7 +16,7 @@
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="#">Admin</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Danh sách sản phẩm trong đơn hàng
-                                    {{ $order->OrderId }}</li>
+                                    {{ $order->id }}</li>
                             </ol>
                         </nav>
                     </div>
@@ -58,12 +58,12 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>{{ $order->OrderId }}</td>
+                                            <td>{{ $order->id }}</td>
                                             <td>{{ $order->user->FullName }}</td>
 
                                             <!-- Combobox cho Order Status -->
                                             <td>
-                                                <select name="OrderStatus" form="orderForm_{{ $order->OrderId }}">
+                                                <select name="OrderStatus" form="orderForm_{{ $order->id }}">
                                                     <option value="Pending"
                                                         {{ $order->OrderStatus == 'Pending' ? 'selected' : '' }}>Pending
                                                     </option>
@@ -81,7 +81,7 @@
 
                                             <!-- Combobox cho Payment Status -->
                                             <td>
-                                                <select name="PaymentStatus" form="orderForm_{{ $order->OrderId }}">
+                                                <select name="PaymentStatus" form="orderForm_{{ $order->id }}">
                                                     <option value="Pending"
                                                         {{ $order->PaymentStatus == 'Pending' ? 'selected' : '' }}>Pending
                                                     </option>
@@ -99,12 +99,14 @@
 
                                             <td class="action-buttons">
                                                 <!-- Form để submit -->
-                                                <form id="orderForm_{{ $order->OrderId }}"
+                                                <form id="orderForm_{{ $order->id }}"
                                                     action="{{ URL::to('/admin/order/ad_edit') }}" method="post">
                                                     @csrf
-                                                    <input type="hidden" name="OrderId" value="{{ $order->OrderId }}">
+                                                    <input type="hidden" name="OrderId" value="{{ $order->id }}">
                                                     <!-- Nút chỉnh sửa -->
-                                                    <button type="submit" style="border: 0px; justify-content: center; align-content: center;" class="edit-button">
+                                                    <button type="submit"
+                                                        style="border: 0px; justify-content: center; align-content: center;"
+                                                        class="edit-button">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
                                                 </form>
@@ -114,7 +116,7 @@
                                     </tbody>
                                 </table>
                                 <h5 class="card-title" style="color: red;">Danh sách Sản phẩm của đơn hàng
-                                    {{ $order->OrderId }}</h5>
+                                    {{ $order->id }}</h5>
 
                                 <table id="zero_config" class="table table-striped table-bordered">
                                     <thead>
@@ -135,15 +137,15 @@
                                                 <td>
                                                     <input type="number" name="Quantity"
                                                         value="{{ $orderItem->Quantity }}"
-                                                        form="editForm_{{ $orderItem->OrderItemId }}"
-                                                        onchange="updateTotalPrice(this, {{ $orderItem->UnitPrice }}, 'totalPrice_{{ $orderItem->OrderItemId }}')">
+                                                        form="editForm_{{ $orderItem->id }}"
+                                                        onchange="updateTotalPrice(this, {{ $orderItem->UnitPrice }}, 'totalPrice_{{ $orderItem->id }}')">
                                                 </td>
 
                                                 <!-- Hiển thị đơn giá mà không chỉnh sửa -->
                                                 <td>{{ $orderItem->UnitPrice }}</td>
 
                                                 <!-- Hiển thị tổng tiền và cập nhật khi số lượng thay đổi -->
-                                                <td id="totalPrice_{{ $orderItem->OrderItemId }}">
+                                                <td id="totalPrice_{{ $orderItem->id }}">
                                                     {{ $orderItem->TotalPrice }}</td>
 
                                                 <td class="action-buttons"
@@ -151,20 +153,22 @@
                                                            flex-direction: row;
                                                            justify-content: center;">
                                                     <!-- Form để submit thông tin chỉnh sửa -->
-                                                    <form id="editForm_{{ $orderItem->OrderItemId }}"
+                                                    <form id="editForm_{{ $orderItem->id }}"
                                                         action="{{ URL::to('/admin/order/orderitem/edit') }}"
                                                         method="post">
                                                         @csrf
                                                         <input type="hidden" name="OrderItemId"
-                                                            value="{{ $orderItem->OrderItemId }}">
+                                                            value="{{ $orderItem->id }}">
                                                         <!-- Nút chỉnh sửa -->
-                                                        <button type="submit" style="border: 0px; justify-content: center; align-content: center;" class="edit-button">
+                                                        <button type="submit"
+                                                            style="border: 0px; justify-content: center; align-content: center;"
+                                                            class="edit-button">
                                                             <i class="fas fa-edit"></i>
                                                         </button>
                                                     </form>
 
                                                     <!-- Nút xóa -->
-                                                    <a href="{{ URL::to('/admin/order/orderitem/remove') . '/' . $orderItem->OrderItemId }}"
+                                                    <a href="{{ URL::to('/admin/order/orderitem/remove') . '/' . $orderItem->id }}"
                                                         class="edit-button">
                                                         <i class="fa fa-times" style="color: red;" aria-hidden="true"></i>
                                                     </a>

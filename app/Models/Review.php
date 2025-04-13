@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 class Review extends Model
 {
@@ -15,22 +16,19 @@ class Review extends Model
         'Rating',
         'Comment',
     ];
-    protected $primaryKey = 'ReviewId'; // Chỉ định cột khóa chính
 
-    public $incrementing = true; // Nếu cột khóa chính tự động tăng
-
-    protected $keyType = 'int';
-
+    protected $table = 'reviews';
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'ProductId', 'ProductId');
+        return $this->belongsTo(Product::class, 'ProductId', 'id');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'UserId', 'UserId');
+        return $this->belongsTo(User::class, 'UserId', 'id');
     }
+
     public function getCreatedAtAttribute($value)
     {
         return Carbon::parse($value);

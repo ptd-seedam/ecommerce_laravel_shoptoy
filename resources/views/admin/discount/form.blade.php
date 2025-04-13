@@ -38,7 +38,7 @@
                 <div class="col-12">
                     <div class="card">
                         <form class="form-horizontal" method="POST" enctype="multipart/form-data"
-                            action="{{ isset($discount) ? route('admin.edit_exce_discount', $discount->DiscountId) : route('admin.store_discount') }}">
+                            action="{{ isset($discount) ? route('admin.edit_exce_discount', $discount->id) : route('admin.store_discount') }}">
                             @csrf
                             <div class="card-body">
                                 <h4 class="card-title">{{ isset($discount) ? 'Cập nhật' : 'Thêm mới' }}</h4>

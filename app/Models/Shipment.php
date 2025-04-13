@@ -16,10 +16,11 @@ class Shipment extends Model
         'EstimatedDeliveryDate',
         'DeliveryStatus',
     ];
-    protected $primaryKey = 'ShipmentId';
-    public $incrementing = true;
+
+    protected $table = 'shipments';
+
     public function order()
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(Order::class, 'OrderId', 'id');
     }
 }

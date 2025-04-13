@@ -20,13 +20,12 @@
                 <img src="{{ asset('storage/' . $imageUrl) }}" alt="{{ $productName }}">
             </div>
             <div class="product-body">
-                <h3 class="product-name"><a href="{{ route('product_detail', $product->ProductId) }}">{{ $productName }}</a>
-                </h3>
+                <h3 class="product-name"><a href="#">{{ $productName }}</a></h3>
                 <h4 class="product-price">
                     <span class="qty">{{ $quantity }}x</span>{{ number_format($totalPrice, 0, ',', '.') }}đ
                 </h4>
             </div>
-            <button class="delete" data-cart-item-id="{{ $item->CartItemId }}"><i class="fa fa-close"></i></button>
+            <button class="delete" data-cart-item-id="{{ $item->id }}"><i class="fa fa-close"></i></button>
         </div>
     @endforeach
 @endsection
@@ -63,7 +62,7 @@
                                             $image = $product->images->first();
                                         @endphp
                                         <div class="product">
-                                            <a href="{{ URL::to('/product') . '/' . $product->ProductId }}">
+                                            <a href="{{ URL::to('/product') . '/' . $product->id }}">
                                                 <div class="product-img">
                                                     <img src="{{ $image ? asset('storage/' . $image->ImageUrl) : 'default_image_url' }}"
                                                         alt="{{ $product->Name }}">
@@ -74,14 +73,14 @@
                                                 <div class="product-body">
                                                     <p class="product-category">{{ $product->category->Name }}</p>
                                                     <h3 class="product-name"><a
-                                                            href="{{ URL::to('/product') . '/' . $product->ProductId }}">{{ $product->Name }}</a>
+                                                            href="{{ URL::to('/product') . '/' . $product->id }}">{{ $product->Name }}</a>
                                                     </h3>
                                                     <h4 class="product-price">
                                                         {{ number_format($product->Price, 0, ',', '.') }}đ</h4>
                                                 </div>
                                                 <div class="add-to-cart">
                                                     <button class="add-to-cart-btn"
-                                                        data-product-id="{{ $product->ProductId }}"><i
+                                                        data-product-id="{{ $product->id }}"><i
                                                             class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</button>
                                                 </div>
                                             </a>

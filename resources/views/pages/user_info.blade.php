@@ -25,73 +25,76 @@
                     <span class="qty">{{ $quantity }}x</span>{{ number_format($totalPrice, 0, ',', '.') }}đ
                 </h4>
             </div>
-            <button class="delete" data-cart-item-id="{{ $item->CartItemId }}"><i class="fa fa-close"></i></button>
+            <button class="delete" data-cart-item-id="{{ $item->id }}"><i class="fa fa-close"></i></button>
         </div>
     @endforeach
 @endsection
 @section('user_content')
     <div class="user_info-container">
         <!-- Bảng hiển thị thông tin người dùng -->
-        @if(session('message'))
-             <div class="alert alert-success">
+        @if (session('message'))
+            <div class="alert alert-success">
                 {{ session('message') }}
             </div>
-        @endsession
-        <div id="user-info">
-            <h2>Thông tin tài khoản</h2>
-            <form>
-                <table>
-                    <tr>
-                        <td>Họ tên:</td>
-                        <td id="display-name">{{ $user->FullName }}</td>
-                    </tr>
-                    <tr>
-                        <td>Email:</td>
-                        <td id="display-email">{{ $user->Email }}</td>
-                    </tr>
-                    <tr>
-                        <td>Số điện thoại:</td>
-                        <td id="display-phone">{{ $user->PhoneNumber }}</td>
-                    </tr>
-                    <tr>
-                        <td>Địa chỉ:</td>
-                        <td id="display-address">{{ $user->Address }}</td>
-                    </tr>
-                </table>
-            </form>
-            <button id="edit-button">Chỉnh sửa thông tin</button>
-        </div>
-        <!-- Form chỉnh sửa thông tin (ban đầu ẩn) -->
-        <div id="edit-form" style="display: none;">
-            <h2>Chỉnh sửa thông tin</h2>
-            <form action="{{ route('user.detail.save') }}" method="post">
-                @csrf
-                <table>
-                    <tr>
-                        <td> <label for="edit-name">Họ Tên:</label></td>
-                        <td><input type="text" id="edit-name" name="name" value="{{ $user->FullName }}" required>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td> <label for="edit-email">Email:</label></td>
-                        <td><input type="text" id="edit-email" readonly name="email" value="{{ $user->Email }}" required></td>
-                    </tr>
-                    <tr>
-                        <td><label for="edit-phone">Số điện thoại:</label></td>
-                        <td><input type="text" name="phone" id="edit-phone" value="{{ $user->PhoneNumber }}" required>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label for="edit-address">Địa chỉ:</label></td>
-                        <td><input type="text" name="address" id="edit-address" value="{{ $user->Address }}" required>
-                        </td>
-                    </tr>
-                </table>
-                <button type="submit"  id="save-button">Lưu thông tin</button>
+            @endsession
+            <div id="user-info">
+                <h2>Thông tin tài khoản</h2>
+                <form>
+                    <table>
+                        <tr>
+                            <td>Họ tên:</td>
+                            <td id="display-name">{{ $user->FullName }}</td>
+                        </tr>
+                        <tr>
+                            <td>Email:</td>
+                            <td id="display-email">{{ $user->Email }}</td>
+                        </tr>
+                        <tr>
+                            <td>Số điện thoại:</td>
+                            <td id="display-phone">{{ $user->PhoneNumber }}</td>
+                        </tr>
+                        <tr>
+                            <td>Địa chỉ:</td>
+                            <td id="display-address">{{ $user->Address }}</td>
+                        </tr>
+                    </table>
+                </form>
+                <button id="edit-button">Chỉnh sửa thông tin</button>
+            </div>
+            <!-- Form chỉnh sửa thông tin (ban đầu ẩn) -->
+            <div id="edit-form" style="display: none;">
+                <h2>Chỉnh sửa thông tin</h2>
+                <form action="{{ route('user.detail.save') }}" method="post">
+                    @csrf
+                    <table>
+                        <tr>
+                            <td> <label for="edit-name">Họ Tên:</label></td>
+                            <td><input type="text" id="edit-name" name="name" value="{{ $user->FullName }}" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> <label for="edit-email">Email:</label></td>
+                            <td><input type="text" id="edit-email" readonly name="email" value="{{ $user->Email }}"
+                                    required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="edit-phone">Số điện thoại:</label></td>
+                            <td><input type="text" name="phone" id="edit-phone" value="{{ $user->PhoneNumber }}"
+                                    required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label for="edit-address">Địa chỉ:</label></td>
+                            <td><input type="text" name="address" id="edit-address" value="{{ $user->Address }}"
+                                    required>
+                            </td>
+                        </tr>
+                    </table>
+                    <button type="submit" id="save-button">Lưu thông tin</button>
 
-            </form>
-            <button type="button" id="cancel-button">Thoát</button>
-        </div>
+                </form>
+                <button type="button" id="cancel-button">Thoát</button>
+            </div>
     </div>
     <!-- xử lý chỉnh sửa thông tin-->
     <script>

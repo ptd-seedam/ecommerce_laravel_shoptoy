@@ -14,16 +14,16 @@ class CartItem extends Model
         'ProductId',
         'Quantity',
     ];
-    protected $table = 'cartitems';
-    protected $primaryKey = 'CartItemId';
+
+    protected $table = 'cart_items';
+
     public function cart()
     {
-        return $this->belongsTo(Cart::class);
+        return $this->belongsTo(Cart::class, 'CartId', 'id');
     }
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'ProductId', 'ProductId');
+        return $this->belongsTo(Product::class, 'ProductId', 'id');
     }
-
 }

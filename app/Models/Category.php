@@ -14,22 +14,21 @@ class Category extends Model
         'Description',
         'Parent_category_id',
     ];
-    protected $primaryKey = 'CategoryId';
-    // Nếu khóa chính  tự động tăng
-    public $incrementing = true;
+
+    protected $table = 'categories';
 
     public function products()
     {
-        return $this->hasMany(Product::class, 'CategoryId', 'CategoryId');
+        return $this->hasMany(Product::class, 'CategoryId', 'id');
     }
 
     public function parent()
     {
-        return $this->belongsTo(Category::class, 'Parent_category_id');
+        return $this->belongsTo(Category::class, 'Parent_category_id', 'id');
     }
 
     public function children()
     {
-        return $this->hasMany(Category::class, 'parent_category_id');
+        return $this->hasMany(Category::class, 'parent_category_id', 'id');
     }
 }

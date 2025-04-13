@@ -15,11 +15,11 @@ class Payment extends Model
         'PaymentDate',
         'Amount',
     ];
-    protected $primaryKey = 'PaymentId';
-    public $incrementing = true;
+
+    protected $table = 'payments';
 
     public function order()
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(Order::class, 'OrderId', 'id');
     }
 }
